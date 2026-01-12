@@ -109,7 +109,7 @@ const BatterySection = () => {
             <div className="lg:col-span-7 space-y-10">
               <div className="space-y-2">
                 <span className="text-[10px] font-black text-[#0071E3] uppercase tracking-[0.5em]">Endurance Protocol</span>
-                <h2 className="text-5xl lg:text-7xl font-bold text-white tracking-tightest leading-none">Up to 27 hours.</h2>
+                <h2 className="text-5xl lg:text-7xl font-bold text-white tracking-tightest leading-none">Up to 16 hours.</h2>
               </div>
               <div className="space-y-6">
                 <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
