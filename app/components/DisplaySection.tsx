@@ -136,7 +136,7 @@ export default function DisplaySection() {
             >
               <div className="relative w-full h-full bg-[#080808] overflow-hidden group">
                  <motion.img 
-                   src="D:\Techjar\HP\wss\Asus\DEMO@\ClientDEMO\public\gallery\oled.png" 
+                   src="/gallery/oled.png" 
                    className="w-full h-full object-cover saturate-[1.4] brightness-[0.85] transition-all duration-[6s] group-hover:scale-105" 
                    alt="HP Pavilion OLED"
                  />
