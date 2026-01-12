@@ -1,199 +1,143 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 
 /**
- * THE MONOLITH PERFORMANCE SECTION
- * A complete structural redesign using depth layers and focal lighting.
+ * HP PAVILION PLUS 14 OLED - PERFORMANCE MONOLITH
+ * Aesthetic: Studio Zero, Surgical Precision, Silk Titanium.
  */
 
-const WORKFLOW_MODES = [
-  {
-    id: 'gaming',
-    title: 'Velocity',
-    subtitle: 'Gaming & Simulation',
-    stat: '144+ FPS',
-    detail: 'Unleashing the full 140W TGP of the NVIDIA® GeForce RTX™ 40-Series. Cinematic ray tracing rendered in real-time.',
-    color: '#3b82f6', // Electric Blue
-    glow: 'rgba(59, 130, 246, 0.15)'
-  },
-  {
-    id: 'editing',
-    title: 'Precision',
-    subtitle: 'Studio & Cinema',
-    stat: '8K Raw',
-    detail: 'Hardware-accelerated encoding for ProRes and AV1. Color-critical accuracy with a factory-calibrated ΔE < 1.0.',
-    color: '#a855f7', // Studio Purple
-    glow: 'rgba(168, 85, 247, 0.15)'
-  },
-  {
-    id: 'office',
-    title: 'Intelligence',
-    subtitle: 'Executive Productivity',
-    stat: '16 Hrs',
-    detail: 'Dedicated NPU engine offloading AI tasks from the CPU, ensuring whisper-silent operation during massive workloads.',
-    color: '#10b981', // Emerald
-    glow: 'rgba(16, 185, 129, 0.15)'
-  }
-]
-
-export default function PerformanceSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [index, setIndex] = useState(0)
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end']
-  })
-
-  // Smooth progress for high-end feel
-  const smoothScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
-
-  // Update active mode based on scroll position
-  useEffect(() => {
-    return smoothScroll.onChange((latest) => {
-      if (latest < 0.33) setIndex(0)
-      else if (latest < 0.66) setIndex(1)
-      else setIndex(2)
-    })
-  }, [smoothScroll])
-
-  const active = WORKFLOW_MODES[index]
+const HeroSection = () => {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05])
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-black">
-      {/* Sticky Viewport */}
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        
-        {/* 1. DYNAMIC FOCAL LIGHTING (The 'Soul' of the section) */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <motion.div 
-            animate={{ backgroundColor: active.glow }}
-            transition={{ duration: 1.5 }}
-            className="w-[60vw] h-[60vh] rounded-full blur-[160px] opacity-50"
-          />
-        </div>
+    <section ref={ref} className="relative h-screen w-full overflow-hidden bg-black">
+      <motion.div style={{ scale }} className="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=2400" className="w-full h-full object-cover opacity-60" alt="Hardware Hero" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-white" />
+      </motion.div>
+      <motion.div style={{ opacity }} className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <p className="text-[10px] font-black tracking-[0.5em] text-[#0071E3] uppercase mb-6">Next Gen Computing</p>
+          <h1 className="text-[clamp(3.5rem,7vw,8.5rem)] font-bold tracking-tightest leading-[0.9] text-white">Extreme capability.<br />Absolute silence.</h1>
+          <p className="mt-6 text-lg text-white/70 font-medium max-w-xl mx-auto">Designed for creators, engineered for endurance.</p>
+        </motion.div>
+        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-12 px-10 py-4 bg-white text-black text-[13px] font-bold uppercase tracking-widest rounded-full shadow-2xl transition-all">Discover More</motion.button>
+      </motion.div>
+    </section>
+  )
+}
 
-        {/* 2. BACKGROUND TYPOGRAPHY (Ghost Text) */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-          <AnimatePresence mode="wait">
-            <motion.h2
-              key={active.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.03, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.1 }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[25vw] font-bold text-white leading-none uppercase"
-            >
-              {active.title}
-            </motion.h2>
-          </AnimatePresence>
-        </div>
+const ArchitectureSection = () => {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useSpring(useTransform(scrollYProgress, [0, 1], [80, -80]), { stiffness: 45, damping: 30 })
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1])
 
-        {/* 3. THE CENTRAL MONOLITH (Visualizing the Power) */}
-        <div className="relative z-10 container mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* CONTENT LAYER */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <motion.div 
-               initial={false}
-               animate={{ color: active.color }}
-               className="text-[10px] font-mono uppercase tracking-[0.5em] mb-6 block"
-            >
-              Mode: {active.subtitle}
+  return (
+    <section ref={ref} className="relative py-24 lg:py-32 bg-white overflow-hidden">
+      <div className="mx-auto max-w-[1550px] px-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div className="lg:col-span-7 relative aspect-[16/10] rounded-[48px] overflow-hidden bg-[#F5F5F7] border border-black/[0.03]">
+          <motion.img src="https://images.unsplash.com/photo-1635776062127-d379bfcba9f4?q=80&w=2400" style={{ scale: imageScale }} className="w-full h-full object-cover saturate-[0.2] contrast-[1.1] opacity-90" />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <motion.div style={{ y }} className="bg-white/10 backdrop-blur-3xl px-16 py-12 rounded-[40px] border border-white/20 shadow-2xl text-center">
+              <span className="text-[9px] font-black uppercase tracking-[0.6em] text-[#1D1D1F]/40 block mb-4">Lithography</span>
+              <span className="text-8xl font-bold text-[#1D1D1F] tracking-tightest leading-none">3<span className="text-4xl align-top">nm</span></span>
             </motion.div>
-
-            <div className="overflow-hidden h-24 mb-4">
-              <AnimatePresence mode="wait">
-                <motion.h3
-                  key={active.id}
-                  initial={{ y: 80 }}
-                  animate={{ y: 0 }}
-                  exit={{ y: -80 }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-6xl md:text-8xl font-medium text-white tracking-tighter"
-                >
-                  {active.title}
-                </motion.h3>
-              </AnimatePresence>
-            </div>
-
-            <motion.p 
-              key={`${active.id}-desc`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-editorial text-white/40 max-w-md leading-relaxed mb-12"
-            >
-              {active.detail}
-            </motion.p>
-
-            {/* Premium Stat Reveal */}
-            <div className="flex items-baseline gap-4">
-              <span className="text-6xl font-light text-white tracking-tighter">
-                {active.stat}
-              </span>
-              <span className="text-xs font-mono text-white/20 uppercase tracking-widest">Performance Peak</span>
-            </div>
-          </div>
-
-          {/* VISUAL CORE LAYER */}
-          <div className="lg:col-span-7 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-xl aspect-square">
-              {/* Outer Glass Ring */}
-              <div className="absolute inset-0 border border-white/5 rounded-full flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border border-white/5 scale-[0.8]" />
-                <div className="absolute inset-0 rounded-full border border-white/5 scale-[0.6]" />
-              </div>
-
-              {/* The "Core" - Floating Silicon Graphic */}
-              <motion.div 
-                animate={{ 
-                  y: [0, -20, 0],
-                  rotateY: [0, 10, 0]
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                <div className="w-64 h-64 glass-panel rounded-3xl border-white/10 flex items-center justify-center shadow-[0_0_100px_rgba(0,0,0,1)] bg-black/40 backdrop-blur-3xl">
-                   <div className="relative">
-                      <motion.div 
-                        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                        className="w-16 h-16 rounded-full blur-2xl" 
-                        style={{ backgroundColor: active.color }}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="w-4 h-4 rounded-full bg-white shadow-[0_0_20px_white]" />
-                      </div>
-                   </div>
-                </div>
-              </motion.div>
-
-              {/* Technical Annotations */}
-              <div className="absolute top-0 right-0 p-8 text-right hidden md:block">
-                 <div className="text-[9px] font-mono text-white/20 uppercase tracking-[0.3em]">Thermal Logic</div>
-                 <div className="text-sm text-white/60">Liquid Metal Cooling</div>
-              </div>
-            </div>
           </div>
         </div>
-
-        {/* 4. PROGRESS BAR (Side) */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-8 h-32 items-center">
-            {WORKFLOW_MODES.map((_, i) => (
-              <motion.div 
-                key={i}
-                animate={{ 
-                  height: index === i ? 40 : 8,
-                  backgroundColor: index === i ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.2)'
-                }}
-                className="w-[1px] rounded-full transition-all"
-              />
-            ))}
+        <div className="lg:col-span-5 space-y-10">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 rounded-full bg-[#0071E3] animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#86868B]">Architecture</span>
+            </div>
+            <h2 className="text-[clamp(3rem,5vw,5rem)] font-bold tracking-tightest leading-[0.95] text-[#1D1D1F]">Silicon, <br /><span className="text-transparent bg-clip-text bg-gradient-to-b from-[#86868B] to-[#D2D2D7]">perfected.</span></h2>
+            <p className="text-lg font-medium text-[#424245] leading-relaxed max-w-md">A masterclass in efficiency. The M4 chip redefined for sustained pro-performance without a whisper of sound.</p>
+          </div>
+          <button className="group flex items-center gap-6 text-[11px] font-black uppercase tracking-[0.4em] text-[#0066CC]">
+            Explore Tech Specs <span className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center group-hover:bg-[#0066CC] group-hover:text-white transition-all">→</span>
+          </button>
         </div>
-
       </div>
     </section>
+  )
+}
+
+const PerformanceMetrics = () => {
+  const metrics = [
+    { label: 'CPU', value: 95, detail: 'Next-gen Multi-core' },
+    { label: 'GPU', value: 88, detail: 'Hardware Ray Tracing' },
+    { label: 'NPU', value: 92, detail: 'Neural Intelligence' },
+    { label: 'Watt', value: 97, detail: 'Silent Architecture' },
+  ]
+
+  return (
+    <section className="relative py-24 bg-white">
+      <div className="max-w-[1400px] mx-auto px-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {metrics.map((metric, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="group p-8 rounded-[40px] bg-[#F5F5F7] border border-black/[0.02] flex flex-col items-center text-center">
+              <div className="relative w-28 h-28 mb-6 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90">
+                  <circle cx="56" cy="56" r="50" className="stroke-black/[0.05]" strokeWidth="3" fill="transparent" />
+                  <motion.circle cx="56" cy="56" r="50" stroke="#0071E3" strokeWidth="3" strokeDasharray="314" initial={{ strokeDashoffset: 314 }} whileInView={{ strokeDashoffset: 314 - (314 * metric.value) / 100 }} transition={{ duration: 2, ease: "circOut" }} strokeLinecap="round" fill="transparent" />
+                </svg>
+                <span className="absolute text-2xl font-bold text-[#1D1D1F] tracking-tighter">{metric.value}%</span>
+              </div>
+              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#1D1D1F] mb-1">{metric.label}</h4>
+              <p className="text-[9px] font-bold text-[#86868B] uppercase tracking-widest">{metric.detail}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const BatterySection = () => {
+  return (
+    <section className="relative py-24 lg:pb-32 bg-white">
+      <div className="mx-auto max-w-[1400px] px-10">
+        <div className="relative w-full bg-[#010101] rounded-[56px] p-12 lg:p-20 shadow-2xl overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-[#0071E3]/10 blur-[120px] pointer-events-none" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            <div className="lg:col-span-7 space-y-10">
+              <div className="space-y-2">
+                <span className="text-[10px] font-black text-[#0071E3] uppercase tracking-[0.5em]">Endurance Protocol</span>
+                <h2 className="text-5xl lg:text-7xl font-bold text-white tracking-tightest leading-none">Up to 27 hours.</h2>
+              </div>
+              <div className="space-y-6">
+                <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div initial={{ width: 0 }} whileInView={{ width: '100%' }} transition={{ duration: 2 }} className="h-full bg-[#0071E3] shadow-[0_0_15px_#0071E3]" />
+                </div>
+                <p className="text-sm text-white/40 font-medium tracking-wide italic">* Industry leading runtime based on Titan Labs 2026 Verification.</p>
+              </div>
+            </div>
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="text-center">
+                <span className="text-9xl font-bold text-white tracking-tightest leading-none">4<span className="text-4xl text-[#0071E3]">×</span></span>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 mt-4">Longer Runtime</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default function PerformanceSection() {
+  return (
+    <main className="bg-white antialiased">
+      <HeroSection />
+      <ArchitectureSection />
+      <PerformanceMetrics />
+      <BatterySection />
+    </main>
   )
 }

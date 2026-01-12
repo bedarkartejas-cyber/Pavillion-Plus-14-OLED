@@ -4,151 +4,239 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef, ReactNode } from 'react'
 
 /**
- * THE TITAN BESPOKE (ULTRA-PREMIUM FEATURES)
- * Implements architectural bento-spacing, fluid depth masking,
- * and high-fidelity textures for an elite professional narrative.
+ * THE ELITE BENTO - DYNAMIC ANIMATION EDITION
+ * Principles: Kinetic Parallax, Micro-Interaction Physics, and Staggered Reveals.
+ * Logic: Uses standard industry scaling for typography and block margins.
  */
 
-const BespokeTile = ({ 
+const FeatureTile = ({ 
   children, 
   className = "", 
-  delay = 0 
+  delay = 0,
+  accent = "blue" 
 }: { 
   children: ReactNode, 
   className?: string,
-  delay?: number
-}) => (
-  <motion.div 
-    initial={{ opacity: 0, scale: 0.98, y: 40 }}
-    whileInView={{ opacity: 1, scale: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ 
-      delay, 
-      duration: 1.4, 
-      ease: [0.19, 1, 0.22, 1] // Luxury "Power" Ease
-    }}
-    className={`relative overflow-hidden rounded-[4rem] border border-white/5 bg-[#030303] group ${className}`}
-  >
-    {/* Metallic Shimmer Effect */}
-    <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.02] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-    {/* Micro-Film Grain */}
-    <div className="absolute inset-0 opacity-[0.012] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
-    {children}
-  </motion.div>
-)
+  delay?: number,
+  accent?: "blue" | "purple" | "emerald"
+}) => {
+  const containerRef = useRef(null)
+  
+  const accentColors = {
+    blue: "bg-[#0071E3]",
+    purple: "bg-[#BF5AF2]",
+    emerald: "bg-[#34C759]"
+  }
+
+  return (
+    <motion.div 
+      ref={containerRef}
+      initial={{ opacity: 0, y: 60, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ 
+        delay, 
+        duration: 1.4, 
+        ease: [0.28, 0.11, 0.32, 1] // Apple Ease
+      }}
+      whileHover={{ y: -5 }}
+      className={`relative overflow-hidden rounded-[32px] bg-white border border-black/[0.04] group shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-shadow duration-700 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] ${className}`}
+    >
+      {/* 1. KINETIC SHEEN (Interactive light reflection) */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1, x: ['-100%', '100%'] }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none z-10" 
+      />
+      
+      {/* 2. ACCENT ATMOSPHERE (Pulsing Glow) */}
+      <div className={`absolute -inset-20 ${accentColors[accent]} opacity-0 blur-[120px] group-hover:opacity-[0.06] transition-opacity duration-[1.5s] ease-in-out`} />
+      
+      {children}
+    </motion.div>
+  )
+}
 
 export default function FeaturesSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  })
+
+  // Smooth scroll parallax for deep background elements
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -100])
+
   return (
-    <section ref={containerRef} id="features" className="relative py-60 bg-black">
+    <section ref={sectionRef} id="features" className="relative py-48 bg-[#F5F5F7] overflow-hidden">
       
-      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+      {/* DYNAMIC ATMOSPHERIC LAYERS */}
+      <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-100 blur-[180px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-100 blur-[150px] rounded-full" />
+      </motion.div>
+
+      <div className="container-pro mx-auto px-8 max-w-[1300px] relative z-10">
         
-        {/* 1. ARCHITECTURAL HEADER */}
-        <div className="mb-40 flex flex-col md:flex-row md:items-start justify-between">
-          <div className="max-w-5xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-6 mb-12"
-            >
-              <div className="h-[1px] w-24 bg-gradient-to-r from-blue-600 to-transparent" />
-              <span className="text-[11px] font-mono text-blue-500/80 uppercase tracking-[0.6em]">Titan Masterclass</span>
-            </motion.div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="text-8xl md:text-[11rem] font-medium text-white tracking-tighter leading-[0.75]"
-            >
-              Elite <br />
-              <span className="text-white/10 font-light italic">Orchestration.</span>
-            </motion.h2>
-          </div>
-        </div>
-
-        {/* 2. THE BESPOKE CANVAS (Asymmetric Grid) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 auto-rows-[460px]">
+        {/* HEADER REVEAL */}
+        <div className="mb-32 text-center">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="inline-block px-5 py-2 rounded-full border border-black/5 bg-white/60 backdrop-blur-md mb-10 shadow-sm"
+          >
+            <span className="text-[12px] font-bold text-[#86868B] uppercase tracking-[0.45em]">Engineering Masterclass</span>
+          </motion.div>
           
-          {/* THE VANGUARD: Wi-Fi 7 (Dominant Hero) */}
-          <BespokeTile className="md:col-span-8 p-0 flex items-end">
-            <img 
-              src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop" 
-              className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[4s] ease-out"
-              alt="Advanced Silicon"
-            />
-            <div className="relative z-10 p-20 bg-gradient-to-t from-black via-black/90 to-transparent w-full">
-              <span className="text-blue-500 font-mono text-[10px] uppercase tracking-[0.4em] block mb-8">Vanguard Network</span>
-              <h3 className="text-6xl text-white mb-8 tracking-tighter">Wi-Fi 7 Extreme</h3>
-              <p className="text-white/40 text-xl max-w-2xl leading-relaxed font-light">
-                Redefining the speed of thought. With 5.8 Gbps throughput, your cloud-gaming environments and 4K asset streams resolve instantly.
-              </p>
-            </div>
-          </BespokeTile>
+          <motion.h2 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.2 }}
+            className="text-center
+              font-bold
+              leading-[1.02]
+              tracking-[-0.04em]
+              text-[clamp(3.8rem,7vw,6.6rem)]
+              text-transparent bg-clip-text
+              bg-gradient-to-b
+              from-[#0B0B0C]
+              via-[#1E1E22]
+              to-[#6B6B72]"
+          >
+            Power that moves. <br />
+            <motion.span 
+              initial={{ opacity: 0 }} 
+              whileInView={{ opacity: 1 }} 
+              transition={{ delay: 0.8, duration: 1.5 }}
+              className="block mt-3
+                font-semibold
+                tracking-[-0.03em]
+                text-[clamp(3rem,5.8vw,5.4rem)]
+                text-transparent bg-clip-text
+                bg-gradient-to-b
+                from-[#B0B1B7]
+                to-[#7A7B82]"
+            >
+              Beauty that stays.
+            </motion.span>
+          </motion.h2>
+        </div>
 
-          {/* THE CINEMATOGRAPHER: Thunderbolt (Vertical Pillar) */}
-          <BespokeTile className="md:col-span-4 p-20 flex flex-col justify-between border-purple-500/5 hover:border-purple-500/20 transition-all">
-            <div>
-              <span className="text-purple-500 font-mono text-[10px] uppercase tracking-[0.4em] block mb-8">Creative I/O</span>
-              <h3 className="text-5xl text-white mb-6 tracking-tighter">Pro <br/>Lanes</h3>
-            </div>
-            {/* Visual: Kinetic Port Shimmer */}
-            <div className="relative h-32 w-full flex items-center justify-center">
-               <div className="absolute inset-0 bg-purple-600/5 blur-[100px] rounded-full group-hover:bg-purple-600/15 transition-colors duration-1000" />
-               <div className="flex gap-6">
-                  <div className="w-[1px] h-20 bg-white/5 rounded-full group-hover:bg-purple-500 transition-all duration-700" />
-                  <div className="w-[1px] h-20 bg-white/5 rounded-full group-hover:bg-purple-500 transition-all duration-700 delay-150" />
-               </div>
-            </div>
-            <p className="text-white/20 text-sm font-light leading-relaxed">
-              Dual 40Gbps channels. Support for two 8K cinema displays or a full studio RAID array.
-            </p>
-          </BespokeTile>
-
-          {/* THE ARCHITECT: Battery (Vertical Pillar) */}
-          <BespokeTile className="md:col-span-4 p-20 flex flex-col justify-between border-emerald-500/5 hover:border-emerald-500/20 transition-all">
+        {/* BENTO GRID REVEAL */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[460px]">
+          
+          {/* CONNECTIVITY (Micro-animation on Wi-Fi text) */}
+          <FeatureTile accent="blue" delay={0.1} className="md:col-span-8 flex flex-col justify-end p-16">
             <div className="relative z-10">
-              <span className="text-emerald-500 font-mono text-[10px] uppercase tracking-[0.4em] block mb-8">Endurance</span>
-              <h3 className="text-5xl text-white mb-6 tracking-tighter">16-Hour <br/>Unplugged</h3>
-            </div>
-            {/* Liquid Silicon Battery Visual */}
-            <div className="h-56 w-full bg-white/[0.02] rounded-[3rem] border border-white/5 p-3 overflow-hidden relative">
-               <motion.div 
-                 initial={{ height: "10%" }}
-                 whileInView={{ height: "100%" }}
-                 transition={{ duration: 3.5, ease: [0.19, 1, 0.22, 1] }}
-                 className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-emerald-600/30 to-emerald-400/5"
-               />
-               <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-emerald-500/20 font-mono text-[11px] tracking-[0.5em] uppercase">Titan Power Cell</span>
-               </div>
-            </div>
-          </BespokeTile>
-
-          {/* THE TITAN: Military Grade (Wide Hero) */}
-          <BespokeTile className="md:col-span-8 p-0 flex items-center">
-             <img 
-              src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=2070&auto=format&fit=crop" 
-              className="absolute inset-0 w-full h-full object-cover opacity-10 grayscale group-hover:scale-105 transition-all duration-[5s]"
-              alt="Industrial Texture"
-            />
-            <div className="relative z-10 p-20 max-w-3xl">
-              <span className="text-amber-500 font-mono text-[10px] uppercase tracking-[0.4em] block mb-8">MIL-STD 810H</span>
-              <h3 className="text-6xl text-white mb-8 tracking-tighter leading-none">Titanium Build <br/><span className="text-white/10 italic">Indestructible Spirit.</span></h3>
-              <p className="text-white/40 text-xl font-light leading-relaxed">
-                Rigorously tested against thermal shock, altitude, and vibration. Forged to sustain peak operation in the world’s most demanding environments.
+              <motion.span 
+                initial={{ letterSpacing: "0.4em" }}
+                whileInView={{ letterSpacing: "0.6em" }}
+                transition={{ duration: 2 }}
+                className="text-[#0071E3] font-bold text-[11px] uppercase block mb-6"
+              >
+                Connectivity
+              </motion.span>
+              <h3 className="text-5xl md:text-6xl font-bold text-[#1D1D1F] mb-8 tracking-tightest">
+                Wi-Fi 7. <br/>
+                Beyond fast.
+              </h3>
+              <p className="text-[#424245] text-xl max-w-xl font-medium leading-relaxed opacity-80">
+                Experience the next standard of speed. Resolve complex cloud environments instantly with near-zero latency.
               </p>
             </div>
-          </BespokeTile>
+          </FeatureTile>
+
+          {/* EXPANSION (Liquid shimmer divider) */}
+          <FeatureTile accent="purple" delay={0.3} className="md:col-span-4 p-14 flex flex-col justify-between">
+            <div className="space-y-4">
+              <span className="text-[#BF5AF2] font-bold text-[11px] uppercase tracking-[0.4em] block">I/O Precision</span>
+              <h3 className="text-3xl font-bold text-[#1D1D1F] tracking-tight">Dual Thunderbolt™ 4</h3>
+            </div>
+            
+            <div className="relative h-24 w-full bg-black/[0.03] rounded-2xl flex items-center justify-center overflow-hidden border border-black/[0.05]">
+               <motion.div 
+                 animate={{ x: ['-200%', '200%'] }}
+                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                 className="absolute inset-0 bg-gradient-to-r from-transparent via-[#BF5AF2]/10 to-transparent" 
+               />
+               <motion.div 
+                 animate={{ scale: [1, 1.1, 1] }}
+                 transition={{ duration: 2, repeat: Infinity }}
+                 className="flex gap-4 z-10"
+               >
+                 <div className="w-1 h-8 bg-[#BF5AF2] rounded-full opacity-40" />
+                 <div className="w-1 h-8 bg-[#BF5AF2] rounded-full" />
+               </motion.div>
+            </div>
+            
+            <p className="text-[#86868B] text-[15px] font-semibold leading-relaxed">
+              Connect pro displays or high-speed RAID arrays at up to 40Gb/s.
+            </p>
+          </FeatureTile>
+
+          {/* BATTERY (Liquid Fill Animation) */}
+          <FeatureTile accent="emerald" delay={0.2} className="md:col-span-5 p-16 flex flex-col justify-between">
+            <div className="space-y-4">
+              <span className="text-[#34C759] font-bold text-[11px] uppercase tracking-[0.4em] block">Endurance</span>
+              <h3 className="text-6xl font-bold text-[#1D1D1F] tracking-tightest">16 Hours</h3>
+            </div>
+            
+            <div className="relative h-3 w-full bg-black/[0.06] rounded-full overflow-hidden border border-black/[0.05]">
+               <motion.div 
+                 initial={{ width: 0 }}
+                 whileInView={{ width: "100%" }}
+                 transition={{ duration: 2.5, delay: 0.8, ease: "circOut" }}
+                 className="h-full bg-[#34C759]" 
+               />
+            </div>
+            
+            <p className="text-[#86868B] text-xl font-medium leading-snug">
+              Go from dawn to dusk without reaching for your charger.
+            </p>
+          </FeatureTile>
+
+          {/* CHASSIS (Hover Scale Depth) */}
+          <FeatureTile delay={0.4} className="md:col-span-7 flex items-center p-16">
+            <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-[#1D1D1F]/[0.02] to-transparent pointer-events-none" />
+            <div className="max-w-md relative z-10">
+              <span className="text-[#1D1D1F]/40 font-bold text-[11px] uppercase tracking-[0.5em] block mb-8">Craftsmanship</span>
+              <h3 className="text-5xl font-bold text-[#1D1D1F] mb-8 tracking-tightest">
+                Recycled 14. <br/>
+                <motion.span 
+                  whileInView={{ color: "#1D1D1F" }} 
+                  initial={{ color: "#86868B" }} 
+                  transition={{ delay: 1, duration: 1 }}
+                >
+                  Uncompromising.
+                </motion.span>
+              </h3>
+              <p className="text-[#424245] font-medium text-lg leading-relaxed opacity-80">
+                A chassis carved from 100% recycled aero-grade aluminum. Lightweight but ready for anything.
+              </p>
+            </div>
+          </FeatureTile>
 
         </div>
 
-        {/* 3. BESPOKE CERTIFICATION BAR */}
-        <div className="mt-40 pt-20 border-t border-white/5 flex flex-wrap justify-between gap-16 opacity-10 hover:opacity-100 transition-opacity duration-1000">
-           {['Harman Kardon Audio', 'Dolby Atmos®', 'AiSense Camera', 'VESA DisplayHDR™'].map((cert, i) => (
-             <span key={i} className="text-[12px] font-mono text-white tracking-[0.8em] uppercase">{cert}</span>
+        {/* CERTIFICATION REVEAL (Micro-Interaction) */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1.5 }}
+          className="mt-32 pt-16 border-t border-black/[0.06] flex flex-wrap justify-center gap-16 md:gap-24"
+        >
+           {['B&O Audio', 'Dolby Vision®', 'IMAX® Enhanced', 'VESA True Black'].map((cert, i) => (
+             <motion.span 
+               key={i} 
+               whileHover={{ scale: 1.1, color: '#1D1D1F' }}
+               className="text-[12px] font-bold text-[#86868B]/50 uppercase tracking-[0.5em] transition-all cursor-crosshair"
+             >
+               {cert}
+             </motion.span>
            ))}
-        </div>
+        </motion.div>
 
       </div>
     </section>

@@ -1,113 +1,176 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 
 /**
- * THE TITAN INVITATION (CTA SECTION)
- * Replaces standard CTAs with a high-fidelity "Bespoke Invitation" experience.
- * Features liquid-metal textures and elite professional narratives.
+ * TITAN PRODUCT INVITATION — CANVAS EDITION
+ * Theme: Studio White
+ * Features: Canvas-based ambient motion + editorial CTA
  */
+
 export default function CTASection() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  /* ───────────────────────────────────────────── */
+  /* Scroll-based motion                           */
+  /* ───────────────────────────────────────────── */
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start']
+    target: sectionRef,
+    offset: ['start end', 'end start'],
   })
 
-  // Luxury Parallax for background elements
-  const y = useTransform(scrollYProgress, [0, 1], [-100, 100])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const contentY = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const contentOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1])
+
+  /* ───────────────────────────────────────────── */
+  /* Canvas animation (ambient light waves)        */
+  /* ───────────────────────────────────────────── */
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationFrame: number
+    let time = 0
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = canvas.offsetHeight
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    const render = () => {
+      time += 0.003
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      const gradient = ctx.createRadialGradient(
+        canvas.width * (0.5 + Math.sin(time) * 0.15),
+        canvas.height * (0.4 + Math.cos(time) * 0.1),
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width
+      )
+
+      gradient.addColorStop(0, 'rgba(0,113,227,0.06)')
+      gradient.addColorStop(0.4, 'rgba(0,113,227,0.03)')
+      gradient.addColorStop(1, 'rgba(255,255,255,0)')
+
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      animationFrame = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      cancelAnimationFrame(animationFrame)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
 
   return (
-    <section ref={containerRef} id="contact" className="relative py-60 bg-black overflow-hidden">
-      
-      {/* 1. LIQUID METAL BACKGROUND */}
-      <motion.div 
-        style={{ y, opacity }}
-        className="absolute inset-0 pointer-events-none"
+    <section
+      ref={sectionRef}
+      className="relative bg-[#F5F5F7] py-44 overflow-hidden border-t border-black/[0.04]"
+    >
+      {/* ───────────────────────────────────────────── */}
+      {/* CANVAS LAYER                                */}
+      {/* ───────────────────────────────────────────── */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+
+      {/* Soft studio top-light */}
+      <div className="absolute inset-x-0 top-0 h-[40vh] bg-gradient-to-b from-white to-transparent pointer-events-none" />
+
+      {/* ───────────────────────────────────────────── */}
+      {/* CONTENT                                     */}
+      {/* ───────────────────────────────────────────── */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 mx-auto max-w-[1000px] px-6 text-center"
       >
-        {/* Large abstract gradient "soul" */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-blue-600/10 blur-[160px] rounded-full" />
-        
-        {/* Subtle hardware-inspired grid */}
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* Eyebrow */}
+        <span className="block text-[11px] font-medium tracking-tight text-[#86868B] mb-8">
+          Pavilion Plus 14 OLED
+        </span>
+
+        {/* Headline */}
+        <h2 className="text-[clamp(3rem,6vw,5.5rem)] font-semibold tracking-tight leading-[1.05] text-[#1D1D1F] mb-10">
+          Ready when you are.
+        </h2>
+
+        {/* Copy */}
+        <p className="text-[18px] md:text-[20px] text-[#424245] leading-relaxed max-w-2xl mx-auto mb-16">
+          Designed for creators, professionals, and everyday brilliance.
+          Pavilion Plus 14 OLED delivers clarity, endurance, and performance
+          in a form that disappears in your bag.
+        </p>
+
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <motion.button
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-10 py-3.5 rounded-full bg-[#0071E3] text-white text-[15px] font-medium
+                       shadow-[0_8px_24px_rgba(0,113,227,0.25)] hover:bg-[#0077ED] transition-colors"
+          >
+            Buy Pavilion Plus 14
+          </motion.button>
+
+          <motion.a
+            whileHover={{ color: '#0066CC' }}
+            href="#specs"
+            className="text-[15px] font-medium text-[#1D1D1F] transition-colors"
+          >
+            Explore technical specifications
+          </motion.a>
+        </div>
+
+        {/* Value strip */}
+        <div className="mt-28 grid grid-cols-1 sm:grid-cols-3 gap-12 border-t border-black/[0.06] pt-16 text-left">
+          <div>
+            <span className="block text-[11px] font-medium text-[#86868B] mb-2">
+              Display
+            </span>
+            <p className="text-[15px] text-[#1D1D1F]">
+              2.8K OLED · 120Hz · 100% DCI-P3
+            </p>
+          </div>
+
+          <div>
+            <span className="block text-[11px] font-medium text-[#86868B] mb-2">
+              Performance
+            </span>
+            <p className="text-[15px] text-[#1D1D1F]">
+              Intel® Core™ Ultra · AI Acceleration
+            </p>
+          </div>
+
+          <div>
+            <span className="block text-[11px] font-medium text-[#86868B] mb-2">
+              Endurance
+            </span>
+            <p className="text-[15px] text-[#1D1D1F]">
+              Up to 27 hours · Fast Charge
+            </p>
+          </div>
+        </div>
       </motion.div>
 
-      <div className="container mx-auto px-6 relative z-10 text-center">
-        
-        {/* 2. TITAN BADGE */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-2xl mb-12"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-          <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.4em]">Limited Titan Release</span>
-        </motion.div>
-
-        {/* 3. EDITORIAL HEADLINE */}
-        <motion.h2 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-7xl md:text-[10rem] font-medium text-white tracking-tighter leading-[0.8] mb-16"
-        >
-          Own the <br />
-          <span className="text-white/10 italic">Apex.</span>
-        </motion.h2>
-
-        <motion.p 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-editorial text-white/40 max-w-2xl mx-auto mb-20 leading-relaxed"
-        >
-          Whether you are rendering 8K cinema, competing at the global stage, 
-          or orchestrating an enterprise, the ZenBook Pro Titan is your definitive edge.
-        </motion.p>
-
-        {/* 4. PREMIUM CALL TO ACTION */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="group relative px-12 py-6 bg-white rounded-full overflow-hidden transition-transform duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity" />
-            <span className="relative z-10 text-black font-medium tracking-tight text-lg">Order Your Titan</span>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ backgroundColor: "rgba(255,255,255,0.08)" }}
-            className="px-12 py-6 border border-white/10 rounded-full text-white/60 font-light tracking-tight text-lg transition-colors backdrop-blur-md"
-          >
-            Request Private Demo
-          </motion.button>
-        </div>
-
-        {/* 5. DATA SUMMARY (PERSONA STATS) */}
-        <div className="mt-40 grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/5 pt-20 max-w-5xl mx-auto">
-          <div>
-            <span className="text-blue-400 font-mono text-[9px] uppercase tracking-widest block mb-4">The Vanguard</span>
-            <p className="text-white text-sm font-light">Optimized for Gaming & 120Hz Fluidity.</p>
-          </div>
-          <div>
-            <span className="text-purple-400 font-mono text-[9px] uppercase tracking-widest block mb-4">The Cinematographer</span>
-            <p className="text-white text-sm font-light">Calman Verified OLED Color Science.</p>
-          </div>
-          <div>
-            <span className="text-emerald-400 font-mono text-[9px] uppercase tracking-widest block mb-4">The Architect</span>
-            <p className="text-white text-sm font-light">16-Hour AI-Accelerated Endurance.</p>
-          </div>
-        </div>
-
-      </div>
-
-      {/* FOOTER LOGO WATERMARK */}
-      <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 text-[30vw] font-bold text-white/[0.02] tracking-tighter pointer-events-none select-none">
+      {/* Ultra-subtle watermark */}
+      <div className="absolute bottom-[-8%] left-1/2 -translate-x-1/2 text-[26vw]
+                      font-semibold tracking-tight text-black/[0.025]
+                      pointer-events-none select-none">
         TITAN
       </div>
     </section>

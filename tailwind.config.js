@@ -9,159 +9,130 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // 1. SEMANTIC COLOR SYSTEM (Titanium & Obsidian Theme)
+      // 1. THE OBSIDIAN COLOR SYSTEM
+      // Based on Apple's "Pro" dark mode and Titanium finishes
       colors: {
-        // Backgrounds
-        canvas: '#000000',           // Absolute Void
-        'canvas-subtle': '#08080A',  // Deep Space
+        canvas: '#000000',           // Deepest black for OLED screens
+        'canvas-subtle': '#161617',  // Elevated section background
+        'canvas-elevated': '#1D1D1F', // Secondary surfaces/cards
         
-        // Surfaces (Glass & Metal)
-        surface: 'rgba(255, 255, 255, 0.03)',
-        'surface-highlight': 'rgba(255, 255, 255, 0.08)',
-        'surface-active': 'rgba(255, 255, 255, 0.12)',
-        
-        // Borders
-        border: 'rgba(255, 255, 255, 0.06)',
-        'border-light': 'rgba(255, 255, 255, 0.15)',
+        // High-Precision Borders
+        border: 'rgba(255, 255, 255, 0.12)',
+        'border-light': 'rgba(255, 255, 255, 0.24)',
+        'border-strong': 'rgba(255, 255, 255, 0.40)',
 
-        // Typography
-        'content-primary': '#F5F5F7',    // Off-white for less eye strain
-        'content-secondary': '#86868B',  // Metallic Grey
-        'content-tertiary': '#48484A',   // Dark Grey
+        // Typography Hierarchy
+        'content-primary': '#F5F5F7',   // Silver/Off-white
+        'content-secondary': '#A1A1A6', // Muted Silver
+        'content-tertiary': '#6E6E73',  // Subdued Slate
+        'content-inverse': '#000000',   // For light buttons/surfaces
 
-        // Accents (The "Soul" of the UI)
-        'zen-blue': {
-          DEFAULT: '#2997FF',
-          glow: 'rgba(41, 151, 255, 0.5)',
-          dim: 'rgba(41, 151, 255, 0.1)'
+        // Brand Accents
+        'apple-blue': {
+          DEFAULT: '#0071E3',
+          hover: '#0077ED',
+          vivid: '#2997FF', // Used for links and highlights
         },
-        'zen-purple': {
-          DEFAULT: '#BF5AF2',
-          glow: 'rgba(191, 90, 242, 0.5)'
-        }
+        'apple-purple': '#BF5AF2', // Apple Intelligence glow
       },
 
-      // 2. TYPOGRAPHY SCALING (Editorial Look)
+      // 2. FLUID & EDITORIAL TYPOGRAPHY
       fontFamily: {
-        sans: ['var(--font-outfit)', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        serif: ['var(--font-crimson)', 'Georgia', 'serif'],
+        // Prioritizes SF Pro system fonts for that native "Apple" feel
+        sans: [
+          'SF Pro Display', 
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          'Inter', 
+          'sans-serif'
+        ],
         mono: ['SF Mono', 'Menlo', 'monospace'],
       },
-      letterSpacing: {
-        'tightest': '-0.08em', // For huge headlines
-        'tighter': '-0.05em',
-        'widest': '0.25em',    // For micro-labels
+      fontSize: {
+        // Massive, impactful headline sizes
+        'hero': ['clamp(3rem, 10vw, 8rem)', { lineHeight: '1.05', letterSpacing: '-0.025em', fontWeight: '700' }],
+        'section-head': ['clamp(2.5rem, 6vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.015em', fontWeight: '600' }],
+        'card-head': ['1.75rem', { lineHeight: '1.2', letterSpacing: '-0.01em', fontWeight: '600' }],
       },
-      lineHeight: {
-        'tighter': '1.1',
-        'loose': '1.8',
+      letterSpacing: {
+        'tightest': '-0.022em',
+        'tighter': '-0.011em',
+        'widest': '0.12em',
       },
 
-      // 3. ANIMATION PHYSICS (The "Feel")
+      // 3. MOTION PHYSICS (The Apple "Feel")
+      // These bezier curves mimic the weight and resistance of macOS/iOS
       transitionTimingFunction: {
-        'expo-out': 'cubic-bezier(0.19, 1, 0.22, 1)',   // Snappy but smooth
-        'circ-out': 'cubic-bezier(0.075, 0.82, 0.165, 1)', // Very gentle
-        'elastic': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)',      // Apple-like standard
+        'apple-ease': 'cubic-bezier(0.28, 0.11, 0.32, 1)',
+        'expo-out': 'cubic-bezier(0.19, 1, 0.22, 1)',
+        'luxury-reveal': 'cubic-bezier(0.4, 0, 0, 1)',
+        'spring-smooth': 'cubic-bezier(0.34, 1.56, 0.64, 1)', // Snappy bounce
       },
       transitionDuration: {
-        '2000': '2000ms',
-        '3000': '3000ms',
+        'premium': '800ms',
+        'slow-reveal': '1200ms',
       },
 
-      // 4. COMPLEX KEYFRAMES
+      // 4. ANIMATION SEQUENCING
       keyframes: {
-        // Reveal Animations
-        'fade-in-up': {
+        'reveal-up': {
           '0%': { opacity: '0', transform: 'translateY(40px) scale(0.98)' },
           '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
-        'fade-in-down': {
-          '0%': { opacity: '0', transform: 'translateY(-20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
-        'blur-in': {
-          '0%': { opacity: '0', filter: 'blur(20px)', transform: 'scale(1.1)' },
-          '100%': { opacity: '1', filter: 'blur(0)', transform: 'scale(1)' },
-        },
-        
-        // Continuous Ambient Animations
-        'float-slow': {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        'float-slower': {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-40px)' },
-        },
-        'pulse-glow': {
-          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
-          '50%': { opacity: '0.8', transform: 'scale(1.2)' },
-        },
-        'shimmer': {
-          '0%': { backgroundPosition: '200% center' },
-          '100%': { backgroundPosition: '-200% center' },
-        },
-        'grain-noise': {
-          '0%': { transform: 'translate(0, 0)' },
-          '10%': { transform: 'translate(-5%, -5%)' },
-          '20%': { transform: 'translate(-10%, 5%)' },
-          '30%': { transform: 'translate(5%, -10%)' },
-          '40%': { transform: 'translate(-5%, 15%)' },
-          '50%': { transform: 'translate(-10%, 5%)' },
-          '60%': { transform: 'translate(15%, 0)' },
-          '70%': { transform: 'translate(0, 10%)' },
-          '80%': { transform: 'translate(-15%, 0)' },
-          '90%': { transform: 'translate(10%, 5%)' },
-          '100%': { transform: 'translate(5%, 0)' },
+        'mask-shimmer': {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
         }
       },
-      
       animation: {
-        'fade-in-up': 'fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'fade-in-up-delayed': 'fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards',
-        'blur-in': 'blur-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'float': 'float-slow 8s ease-in-out infinite',
-        'float-deep': 'float-slower 12s ease-in-out infinite',
-        'shimmer': 'shimmer 8s linear infinite',
-        'noise': 'grain-noise 8s steps(10) infinite',
+        'reveal': 'reveal-up 1.2s cubic-bezier(0.28, 0.11, 0.32, 1) forwards',
+        'fade': 'fade-in 0.8s ease-out forwards',
+        'shimmer': 'mask-shimmer 4s linear infinite',
       },
 
-      // 5. EXTENDED SPACING (For "Airy" Layouts)
+      // 5. DEPTH & SPACING
       spacing: {
-        'section-gap': '12rem', // Huge gap between sections
-        'content-gap': '8rem',
+        'section': '160px', // Standard gap between product features
+        'gutter': '24px',
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'metallic': 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)',
+        // Metallic and Glass gradients
+        'titanium-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+        'apple-intelligence': 'linear-gradient(45deg, #2997FF, #BF5AF2, #FF5968)',
       },
     },
   },
   plugins: [
-    // Custom Plugin for complex utilities
     plugin(function({ addUtilities }) {
       addUtilities({
+        // The core "Apple Glass" utility
+        '.glass': {
+          'background': 'rgba(22, 22, 23, 0.75)',
+          'backdrop-filter': 'blur(20px) saturate(180%)',
+          '-webkit-backdrop-filter': 'blur(20px) saturate(180%)',
+          'border': '1px solid rgba(255, 255, 255, 0.08)',
+        },
+        // Premium text masking for gradients
+        '.mask-text': {
+          '-webkit-background-clip': 'text',
+          'background-clip': 'text',
+          'color': 'transparent',
+          'display': 'inline-block',
+        },
+        // Hardware acceleration for buttery smooth animations
+        '.smooth-antialiased': {
+          '-webkit-font-smoothing': 'antialiased',
+          '-moz-osx-font-smoothing': 'grayscale',
+          'transform': 'translateZ(0)',
+        },
+        // Balanced text wrapping for headlines
         '.text-balance': {
           'text-wrap': 'balance',
         },
-        '.clip-text': {
-          '-webkit-background-clip': 'text',
-          'background-clip': 'text',
-        },
-        '.hardware-accelerated': {
-          'transform': 'translateZ(0)',
-          'backface-visibility': 'hidden',
-          'perspective': '1000px',
-        },
-        '.scrollbar-hide': {
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        }
       })
     }),
   ],
